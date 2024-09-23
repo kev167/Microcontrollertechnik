@@ -1,5 +1,0 @@
-Hallo, das ist eine Test.
-Ich bin Bernd.
-Das ist die E3A in Softwareentwicklung.
- 
-
