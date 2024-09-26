@@ -53,11 +53,13 @@ void setup() {
     
     MEASURE_START
 
-    for (uint8_t j = sizeof(i)*8, k = i; j > 0; --j, k >>= 1)
+/*
     {
-      buffer[j-1] = '0' + (k & 0x1);
+      uint8_t k = i;
+      for (uint8_t j = sizeof(i)*8; j > 0; k >>= 1)   buffer[--j] = '0' + (k & 0x1);
     }
-    //sprintf_binary(buffer, i);
+*/
+    sprintf_binary(buffer, i);
 
     MEASURE_STOP(cycles, 0)
     Serial.print("Anzahl Takte: ");
