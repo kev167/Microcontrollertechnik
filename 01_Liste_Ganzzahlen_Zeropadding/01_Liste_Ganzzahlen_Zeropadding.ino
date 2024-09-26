@@ -1,3 +1,17 @@
+#define MEASURE_START   cli();              \
+                        TCCR1A = 0;         \
+                        TCCR1B = 1 << CS10; \
+                        TCCR1C = 0;         \
+                        TCNT1 = 0;
+
+/** offset empty loop is 4 cycles with optimization off */
+/** offset empty loop is 1 cycles with standard optimization */
+#define MEASURE_STOP(c, offset)  c = TCNT1; \
+                         c = c - offset;    \
+                         TCCR1B = 0;        \
+                         sei();
+
+
 int sprintf_binary(char* buffer, uint8_t i) {
   const static char string_0[] PROGMEM = "0000";
   const static char string_1[] PROGMEM = "0001";
@@ -33,9 +47,23 @@ void setup() {
   Serial.println("Bitmuster\tuint8_t\tint8_t");  //Bitmuster\tint8_t\n0\t\t0\n
 
   uint8_t i = 0;
-  char buffer[sizeof(i)];
+  uint16_t cycles;
+  char buffer[sizeof(i)*8];
   do {
-    sprintf_binary(buffer, i);
+    
+    MEASURE_START
+
+    for (uint8_t j = sizeof(i)*8, k = i; j > 0; --j, k >>= 1)
+    {
+      buffer[j-1] = '0' + (k & 0x1);
+    }
+    //sprintf_binary(buffer, i);
+
+    MEASURE_STOP(cycles, 0)
+    Serial.print("Anzahl Takte: ");
+    Serial.println(cycles);
+
+
     Serial.print(buffer);
     Serial.print("\t");
     Serial.print((uint8_t)i);  //explicit type cast: i bekommt kurzzeitig den Datentyp uint8_t
