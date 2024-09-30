@@ -51,19 +51,19 @@ void setup() {
   char buffer[sizeof(i)*8];
   do {
     
-    MEASURE_START
+//    MEASURE_START
 
-/*
+
     {
-      uint8_t k = i;
+      auto k{i};
       for (uint8_t j = sizeof(i)*8; j > 0; k >>= 1)   buffer[--j] = '0' + (k & 0x1);
     }
-*/
-    sprintf_binary(buffer, i);
 
-    MEASURE_STOP(cycles, 0)
-    Serial.print("Anzahl Takte: ");
-    Serial.println(cycles);
+//    sprintf_binary(buffer, i);
+
+//    MEASURE_STOP(cycles, 1)
+//    Serial.print("Anzahl Takte: ");
+//    Serial.println(cycles);
 
 
     Serial.print(buffer);
